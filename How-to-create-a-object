@@ -1,7 +1,7 @@
 // Object Literal notation
 'use strict';
 
-var dog = {name:"Scooby", color:"brown"} 
+var dog = {name:"Scooby", color:"brown"}
 dog.bark = function() { console.log("scooby Do")} // dynamic nature of js
 
 // Constructor Notation
@@ -11,6 +11,11 @@ function dog () {
   this.color = "brown"
 }
 var dog = new dog();
+
+// bracket notation
+
+dog["color"] = "brown";
+
 
 // better version
 
@@ -37,7 +42,7 @@ var dog = Object.create(Object.prototype,
               configurable:true
             }
   })
-  
+
 // ES6 notation
 
 class dog {
