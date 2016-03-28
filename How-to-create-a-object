@@ -1,0 +1,53 @@
+// Object Literal notation
+'use strict';
+
+var dog = {name:"Scooby", color:"brown"} 
+dog.bark = function() { console.log("scooby Do")} // dynamic nature of js
+
+// Constructor Notation
+
+function dog () {
+  this.name = "scooby"
+  this.color = "brown"
+}
+var dog = new dog();
+
+// better version
+
+function dog(name, color) {
+  this.name = name
+  this.color = color
+}
+var dog = new dog("scooby", "brown");
+
+// raw Object.create()
+
+var dog = Object.create(Object.prototype,
+  {
+    name: {
+            value:"scooby",
+            enumerable:true,
+            writable:true,
+            configurable:true
+          },
+    color: {
+              value:"brown",
+              enumerable:true,
+              writable:true,
+              configurable:true
+            }
+  })
+  
+// ES6 notation
+
+class dog {
+    constructor (name,color) {
+        this.name = name
+        this.color = color
+    }
+    bark () {
+      console.log("scooby doo");
+    }
+}
+var dog = new dog ("scooby", "brown");
+dog.bark();
