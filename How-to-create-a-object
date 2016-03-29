@@ -56,3 +56,124 @@ class dog {
 }
 var dog = new dog ("scooby", "brown");
 dog.bark();
+
+// js property descriptor
+
+Object.getOwnPropertDescriptor(dog,"name");
+
+// defining attributes here writable
+Object.defineProperty(dog, "name", {writable:false});
+dog.name = "lucy"; // throws error in strict mode
+
+// if a non writable property contains an object
+
+function dog () {
+  this.name = {first:"Scooby", last:"Doo"}
+  this.color = "brown"
+}
+var dog = new dog();
+Object.defineProperty(dog, "name", {writable:false});
+dog.name.first = "lucy" // does not throw error
+// correct way
+Object.freeze(dog.name);
+dog.name.first = "lucy" // does throw error
+
+// for in loop
+
+for (var propertyName in dog) {
+  console.log(propertyName+" : "+dog[propertyName]);
+}
+
+// setting enumarable false means for in loop does not takes into account that property
+
+Object.keys(dog);
+JSON.stringify(dog);
+
+// configurable false means i cannot change other attributes
+
+// getters and setters
+
+Object.defineProperty(dog, 'fullName',
+  {
+    get:function() {
+      return this.name.first+" "+this.name.last;
+    },
+    set:function(value){
+      var nameParts = value.split(" ");
+      this.name.first = nameParts[0];
+      this.name.last = nameParts[1];
+    }
+  }
+)
+
+
+// using prototypes
+
+Object.defineProperty(Arrary.prototype, 'last',
+{
+  get:function() {
+    return this.[this.length-1];
+  }
+})
+
+var arr1 = new Array['red', 'blue', 'green'];
+arr1.last // gives green
+
+
+// A function's prototype is the object instance that will become the prototype
+// for all objects created using this function as a constructor
+// An objects prototype is the object instance from which the object is inherited
+
+dog.__proto__
+
+function dog(name, color) {
+  this.name = name;
+  this.color = color;
+}
+dog.prototype
+var fluffy = new dog ('fluffy', 'white')
+fluffy.__proto__
+console.log(dog.prototype === fluffy.__proto__)// gives true
+
+// creating own prototypal chains
+
+function Animal(voice) {
+  this.voice = voice || "grunt";
+}
+// any function that uses Animal as a prototype gets speak function automatically
+Animal.prototype.speak = function() {
+  console.log(this.voice);
+}
+function cat (name, color) {
+  Animal.call(this, 'Meow');// calls Animal function
+  this.name = name;
+  this.color = color;
+}
+// makes Animal prototype of the cat function so fluffy speak but does not call Animal function whereas new does that
+cat.prototype = Object.create(Animal.prototype);
+// sets cats constructor to cat
+cat.prototype.constructor = cat;
+var fluffy = new cat('fluffy', 'brown');
+console.log(fluffy.__proto__.__proto__);
+
+
+// using class notation
+class Animal {
+  constructor(voice) {
+    this.voice = voice || "grunt";
+  }
+  speak() {
+    console.log(this.voice);
+  }
+}
+class cat extends Animal {
+  constructor(name, color) {
+    super('Meow');
+    this.name = name;
+    this.color = color;
+  }
+}
+var fluffy = new cat('fluffy', 'white');
+cat.speak();
+console.log(Object.keys(fluffy.__proto__.__proto__));
+console.log(fluffy.__proto__.__proto__.hasOwnProperty('speak'));
